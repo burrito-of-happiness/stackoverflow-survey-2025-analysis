@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: survey_raw
+    database: SONAR_TASK
+    schema: RAW
+
+    tables:
+      - name: survey_results
+        identifier: RAW_SURVEY_RESULTS_2025
+
+      - name: survey_schema
+        identifier: RAW_SURVEY_SCHEMA_2025
