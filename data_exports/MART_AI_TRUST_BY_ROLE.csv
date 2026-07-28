@@ -1,0 +1,161 @@
+DEVELOPER_ROLE,AI_TRUST_LEVEL,AI_TRUST_ORDER,RESPONDENT_COUNT,ROLE_RESPONDENT_COUNT,RESPONDENT_SHARE_WITHIN_ROLE
+"Developer, full-stack",Neither trust nor distrust,3,2071,9448,0.2192
+Student,Somewhat trust,2,650,2231,0.2913
+"Developer, embedded applications or devices",Highly distrust,5,309,1011,0.3056
+Cloud infrastructure engineer,Highly distrust,5,77,322,0.2391
+"Developer, embedded applications or devices",Somewhat trust,2,203,1011,0.2008
+"Developer, desktop or enterprise applications",Somewhat trust,2,397,1545,0.257
+Data or business analyst,Somewhat trust,2,93,252,0.369
+Cloud infrastructure engineer,Somewhat distrust,4,101,322,0.3137
+Academic researcher,Neither trust nor distrust,3,166,858,0.1935
+Student,Highly trust,1,87,2231,0.039
+"Developer, mobile",Somewhat distrust,4,216,1021,0.2116
+Engineering manager,Highly distrust,5,115,836,0.1376
+Applied scientist,Highly distrust,5,64,234,0.2735
+Applied scientist,Neither trust nor distrust,3,50,234,0.2137
+Engineering manager,Highly trust,1,21,836,0.0251
+"Founder, technology or otherwise",Somewhat trust,2,110,335,0.3284
+DevOps engineer or professional,Highly distrust,5,192,839,0.2288
+Cybersecurity or InfoSec professional,Somewhat distrust,4,70,278,0.2518
+System administrator,Neither trust nor distrust,3,67,363,0.1846
+Data or business analyst,Neither trust nor distrust,3,50,252,0.1984
+"Developer, mobile",Neither trust nor distrust,3,247,1021,0.2419
+"Developer, AI apps or physical AI",Highly distrust,5,13,156,0.0833
+"Architect, software or solutions",Neither trust nor distrust,3,496,2124,0.2335
+Engineering manager,Somewhat distrust,4,204,836,0.244
+"Developer, desktop or enterprise applications",Somewhat distrust,4,427,1545,0.2764
+Data scientist,Highly distrust,5,55,448,0.1228
+"Developer, game or graphics",Highly distrust,5,130,348,0.3736
+"Developer, front-end",Highly distrust,5,175,1464,0.1195
+"Developer, mobile",Highly trust,1,42,1021,0.0411
+"Senior executive (C-suite, VP, etc.)",Somewhat trust,2,148,422,0.3507
+Database administrator or engineer,Highly trust,1,6,134,0.0448
+Financial analyst or engineer,Somewhat distrust,4,10,73,0.137
+Cloud infrastructure engineer,Highly trust,1,9,322,0.028
+Support engineer or analyst,Highly trust,1,7,189,0.037
+DevOps engineer or professional,Somewhat distrust,4,228,839,0.2718
+DevOps engineer or professional,Highly trust,1,21,839,0.025
+"Developer, front-end",Neither trust nor distrust,3,351,1464,0.2398
+Support engineer or analyst,Neither trust nor distrust,3,39,189,0.2063
+"Developer, game or graphics",Somewhat trust,2,61,348,0.1753
+"Developer, full-stack",Somewhat trust,2,2900,9448,0.3069
+"Founder, technology or otherwise",Somewhat distrust,4,67,335,0.2
+"Architect, software or solutions",Somewhat trust,2,659,2124,0.3103
+Data engineer,Somewhat trust,2,216,589,0.3667
+"Developer, QA or test",Neither trust nor distrust,3,65,260,0.25
+"Developer, mobile",Somewhat trust,2,381,1021,0.3732
+Engineering manager,Neither trust nor distrust,3,208,836,0.2488
+Student,Neither trust nor distrust,3,387,2231,0.1735
+"Developer, desktop or enterprise applications",Highly distrust,5,364,1545,0.2356
+"Developer, game or graphics",Neither trust nor distrust,3,61,348,0.1753
+Student,Highly distrust,5,514,2231,0.2304
+"Developer, desktop or enterprise applications",Neither trust nor distrust,3,327,1545,0.2117
+Retired,Highly trust,1,12,368,0.0326
+Data engineer,Highly distrust,5,85,589,0.1443
+Database administrator or engineer,Somewhat trust,2,36,134,0.2687
+Applied scientist,Somewhat trust,2,41,234,0.1752
+Academic researcher,Highly distrust,5,255,858,0.2972
+Project manager,Neither trust nor distrust,3,48,226,0.2124
+"Architect, software or solutions",Highly trust,1,65,2124,0.0306
+Cybersecurity or InfoSec professional,Somewhat trust,2,71,278,0.2554
+"Developer, QA or test",Highly trust,1,7,260,0.0269
+"Developer, back-end",Highly distrust,5,956,4876,0.1961
+Student,Somewhat distrust,4,593,2231,0.2658
+System administrator,Highly distrust,5,91,363,0.2507
+"Developer, QA or test",Somewhat trust,2,89,260,0.3423
+Cybersecurity or InfoSec professional,Neither trust nor distrust,3,50,278,0.1799
+Data scientist,Neither trust nor distrust,3,90,448,0.2009
+Applied scientist,Somewhat distrust,4,76,234,0.3248
+Data scientist,Somewhat distrust,4,129,448,0.2879
+"Developer, back-end",Highly trust,1,109,4876,0.0224
+Other (please specify):,Highly trust,1,54,1354,0.0399
+"UX, Research Ops or UI design professional",Somewhat distrust,4,15,71,0.2113
+Cybersecurity or InfoSec professional,Highly trust,1,15,278,0.054
+Other (please specify):,Neither trust nor distrust,3,286,1354,0.2112
+"Senior executive (C-suite, VP, etc.)",Somewhat distrust,4,109,422,0.2583
+Support engineer or analyst,Somewhat trust,2,51,189,0.2698
+Cybersecurity or InfoSec professional,Highly distrust,5,72,278,0.259
+Academic researcher,Highly trust,1,27,858,0.0315
+"Architect, software or solutions",Somewhat distrust,4,554,2124,0.2608
+"Developer, back-end",Somewhat trust,2,1378,4876,0.2826
+Project manager,Somewhat distrust,4,50,226,0.2212
+"Senior executive (C-suite, VP, etc.)",Neither trust nor distrust,3,94,422,0.2227
+AI/ML engineer,Somewhat trust,2,185,471,0.3928
+DevOps engineer or professional,Somewhat trust,2,227,839,0.2706
+Cloud infrastructure engineer,Neither trust nor distrust,3,70,322,0.2174
+Data scientist,Highly trust,1,18,448,0.0402
+"Developer, desktop or enterprise applications",Highly trust,1,30,1545,0.0194
+Retired,Neither trust nor distrust,3,85,368,0.231
+Data engineer,Neither trust nor distrust,3,123,589,0.2088
+"Developer, QA or test",Somewhat distrust,4,58,260,0.2231
+"UX, Research Ops or UI design professional",Neither trust nor distrust,3,17,71,0.2394
+Product manager,Somewhat trust,2,64,151,0.4238
+Database administrator or engineer,Somewhat distrust,4,40,134,0.2985
+Product manager,Highly trust,1,8,151,0.053
+"Architect, software or solutions",Highly distrust,5,350,2124,0.1648
+Product manager,Neither trust nor distrust,3,37,151,0.245
+System administrator,Somewhat distrust,4,105,363,0.2893
+"Developer, QA or test",Highly distrust,5,41,260,0.1577
+Financial analyst or engineer,Neither trust nor distrust,3,14,73,0.1918
+"UX, Research Ops or UI design professional",Highly distrust,5,9,71,0.1268
+Academic researcher,Somewhat distrust,4,213,858,0.2483
+Other (please specify):,Highly distrust,5,363,1354,0.2681
+"Developer, mobile",Highly distrust,5,135,1021,0.1322
+"Developer, front-end",Highly trust,1,50,1464,0.0342
+"Developer, back-end",Neither trust nor distrust,3,1069,4876,0.2192
+Retired,Somewhat trust,2,75,368,0.2038
+Data engineer,Highly trust,1,16,589,0.0272
+"Developer, AI apps or physical AI",Somewhat trust,2,58,156,0.3718
+AI/ML engineer,Somewhat distrust,4,95,471,0.2017
+"Developer, game or graphics",Somewhat distrust,4,90,348,0.2586
+"Senior executive (C-suite, VP, etc.)",Highly distrust,5,61,422,0.1445
+"Founder, technology or otherwise",Neither trust nor distrust,3,81,335,0.2418
+Project manager,Somewhat trust,2,90,226,0.3982
+Support engineer or analyst,Somewhat distrust,4,48,189,0.254
+"Senior executive (C-suite, VP, etc.)",Highly trust,1,10,422,0.0237
+Applied scientist,Highly trust,1,3,234,0.0128
+Financial analyst or engineer,Highly trust,1,7,73,0.0959
+"Developer, game or graphics",Highly trust,1,6,348,0.0172
+Product manager,Highly distrust,5,12,151,0.0795
+Product manager,Somewhat distrust,4,30,151,0.1987
+Database administrator or engineer,Highly distrust,5,23,134,0.1716
+Data scientist,Somewhat trust,2,156,448,0.3482
+Data or business analyst,Highly trust,1,18,252,0.0714
+"Developer, back-end",Somewhat distrust,4,1364,4876,0.2797
+"Developer, full-stack",Somewhat distrust,4,2465,9448,0.2609
+"Developer, front-end",Somewhat distrust,4,355,1464,0.2425
+"Developer, front-end",Somewhat trust,2,533,1464,0.3641
+"Developer, full-stack",Highly trust,1,248,9448,0.0262
+Cloud infrastructure engineer,Somewhat trust,2,65,322,0.2019
+DevOps engineer or professional,Neither trust nor distrust,3,171,839,0.2038
+"Developer, embedded applications or devices",Somewhat distrust,4,306,1011,0.3027
+Data engineer,Somewhat distrust,4,149,589,0.253
+"Developer, full-stack",Highly distrust,5,1764,9448,0.1867
+Engineering manager,Somewhat trust,2,288,836,0.3445
+Academic researcher,Somewhat trust,2,197,858,0.2296
+Other (please specify):,Somewhat trust,2,319,1354,0.2356
+Support engineer or analyst,Highly distrust,5,44,189,0.2328
+Retired,Somewhat distrust,4,104,368,0.2826
+"Developer, AI apps or physical AI",Somewhat distrust,4,24,156,0.1538
+"Founder, technology or otherwise",Highly distrust,5,56,335,0.1672
+Financial analyst or engineer,Somewhat trust,2,31,73,0.4247
+System administrator,Somewhat trust,2,78,363,0.2149
+"UX, Research Ops or UI design professional",Highly trust,1,11,71,0.1549
+Data or business analyst,Highly distrust,5,33,252,0.131
+"Founder, technology or otherwise",Highly trust,1,21,335,0.0627
+System administrator,Highly trust,1,22,363,0.0606
+Retired,Highly distrust,5,92,368,0.25
+"Developer, embedded applications or devices",Neither trust nor distrust,3,176,1011,0.1741
+AI/ML engineer,Highly trust,1,47,471,0.0998
+Other (please specify):,Somewhat distrust,4,332,1354,0.2452
+AI/ML engineer,Highly distrust,5,46,471,0.0977
+"Developer, AI apps or physical AI",Highly trust,1,22,156,0.141
+Project manager,Highly distrust,5,26,226,0.115
+Database administrator or engineer,Neither trust nor distrust,3,29,134,0.2164
+"Developer, AI apps or physical AI",Neither trust nor distrust,3,39,156,0.25
+"Developer, embedded applications or devices",Highly trust,1,17,1011,0.0168
+Project manager,Highly trust,1,12,226,0.0531
+"UX, Research Ops or UI design professional",Somewhat trust,2,19,71,0.2676
+Financial analyst or engineer,Highly distrust,5,11,73,0.1507
+AI/ML engineer,Neither trust nor distrust,3,98,471,0.2081
+Data or business analyst,Somewhat distrust,4,58,252,0.2302
