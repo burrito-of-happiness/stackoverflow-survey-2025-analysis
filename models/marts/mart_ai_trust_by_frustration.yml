@@ -1,0 +1,97 @@
+version: 2
+
+models:
+  - name: mart_ai_trust_by_frustration
+    description: >
+      Aggregated analysis of response options from the AI-frustration question
+      by respondent trust in AI tool accuracy.
+
+      Grain: one row per AI trust level and normalized response option.
+      Respondent counts are based on distinct survey responses.
+
+      The field is_actual_frustration separates actual problem categories from
+      the response options 'I don’t use AI tools regularly' and
+      'I haven’t encountered any problems'. All response options are retained
+      so the mart remains faithful to the source question.
+
+      The denominator for respondent_share_within_trust includes respondents
+      who provided an AI-trust response and at least one response option to the
+      AI-frustration question. Consequently, shares for actual frustrations are
+      calculated against all respondents who answered the question, including
+      respondents who reported no problems.
+
+      Because the source question is multi-select, one respondent may be counted
+      under several response options. Shares within a trust group are therefore
+      not expected to sum to 100%.
+
+    columns:
+      - name: ai_trust_level
+        description: Respondent's reported level of trust in AI tool accuracy.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "Highly trust"
+                - "Somewhat trust"
+                - "Neither trust nor distrust"
+                - "Somewhat distrust"
+                - "Highly distrust"
+
+      - name: ai_trust_order
+        description: >
+          Technical sorting key for AI trust levels. This field is created for
+          visualization purposes and is not respondent-provided.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+
+      - name: ai_frustration
+        description: >
+          Normalized response option from the AI-frustration question. Not every
+          value denotes an actual frustration; use is_actual_frustration to
+          distinguish actual problem categories from non-frustration responses.
+        data_tests:
+          - not_null
+
+      - name: is_actual_frustration
+        description: >
+          TRUE for actual AI-frustration categories. FALSE for
+          'I don’t use AI tools regularly' and
+          'I haven’t encountered any problems'.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+              quote: false
+
+      - name: respondent_count
+        description: >
+          Number of distinct respondents with the given AI trust level who
+          selected the response option.
+        data_tests:
+          - not_null
+
+      - name: trust_group_respondent_count
+        description: >
+          Number of distinct respondents in the AI trust group who provided at
+          least one response option to the AI-frustration question.
+        data_tests:
+          - not_null
+
+      - name: respondent_share_within_trust
+        description: >
+          Share of respondents in the AI trust group who selected the response
+          option. The value ranges from 0 to 1. Shares do not sum to 1 because
+          respondents could select multiple options.
+        data_tests:
+          - not_null
+
+      - name: frustration_rank_within_trust
+        description: >
+          Dense rank of an actual frustration by respondent count within each AI
+          trust group. Rank 1 represents the most frequently selected actual
+          frustration. Categories with equal respondent counts receive the same
+          rank. The field is NULL for response options that are not actual
+          frustrations.

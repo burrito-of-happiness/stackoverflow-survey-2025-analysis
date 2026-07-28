@@ -1,0 +1,19 @@
+name: Stackoverflow_Survey_2025
+version: 1.0.0
+config-version: 2
+profile: Stackoverflow_Survey_2025
+model-paths:
+  - models
+analysis-paths:
+  - analyses
+test-paths:
+  - tests
+seed-paths:
+  - seeds
+macro-paths:
+  - macros
+snapshot-paths:
+  - snapshots
+models:
+  Stackoverflow_Survey_2025:
+    +materialized: view

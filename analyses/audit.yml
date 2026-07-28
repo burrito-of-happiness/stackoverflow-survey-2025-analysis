@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: audit_ai_frustrations_write_in_columns
+    description: >
+      Inspects the resolved staging relation for columns related to AI
+      frustrations and classifies the primary multi-select field separately
+      from any possible write-in fields. The audit is used to verify whether
+      the public survey dataset contains a separate column for free-text
+      AI-frustration responses.
+
+  - name: audit_ai_frustrations_long
+    description: >
+      Reconstructs the expected long-format AI frustration data directly from
+      stg_survey_results and reconciles it with int_ai_frustrations_long. The
+      audit checks respondent and row coverage, duplicate-source selections,
+      expected frustration categories, null values, normalization of the
+      source label 'Other (write in):' to 'Other', and any missing, unexpected
+      or mismatched model rows.
+
+  - name: audit_ai_tasks_long
+    description: >
+      Reconstructs the expected long-format AI task data from the five source
+      task-delegation fields and reconciles it with int_ai_tasks_long. The
+      audit checks respondent and row coverage, task and status coverage,
+      null values, duplicate grain, tasks assigned to multiple statuses, and
+      any missing or unexpected model rows.
+
+  - name: response_coverage_and_overlap
+    description: >
+      Summarizes respondent coverage and overlap across the final analytical
+      blocks. It compares the populations with valid AI trust, AI task,
+      AI-frustration, and developer-role responses and reports their key
+      intersections. The analysis helps explain why respondent counts and
+      denominators differ between mart_ai_trust_by_task,
+      mart_ai_trust_by_frustration, and mart_ai_trust_by_role. It is a
+      diagnostic query compiled by dbt but not materialized as a database
+      relation and is not used as a Tableau data source.

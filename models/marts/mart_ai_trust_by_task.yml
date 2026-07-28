@@ -1,0 +1,111 @@
+version: 2
+
+models:
+  - name: mart_ai_trust_by_task
+    description: >
+      Aggregates AI task adoption statuses by respondent trust in the accuracy
+      of AI tool output.
+
+      Population: respondents with a non-null AI trust level who assigned at
+      least one status to at least one task in the AI task matrix.
+
+      Grain: one row per ai_trust_level, ai_task and ai_task_status.
+
+      respondent_share_within_trust measures how common a task-status
+      combination is among all task-matrix respondents in the trust group.
+      Shares across different tasks are not expected to sum to 1 because one
+      respondent may evaluate multiple tasks.
+
+      respondent_share_within_trust_task measures the distribution of adoption
+      statuses among respondents in the trust group who evaluated the specific
+      task. Status shares for one trust level and task should sum to approximately
+      1, provided the upstream one-status-per-respondent-task rule passes.
+
+    columns:
+      - name: ai_trust_level
+        description: Respondent's reported level of trust in AI tool accuracy.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "Highly trust"
+                - "Somewhat trust"
+                - "Neither trust nor distrust"
+                - "Somewhat distrust"
+                - "Highly distrust"
+
+      - name: ai_trust_order
+        description: >
+          Technical sorting key for AI trust levels, from highest trust (1)
+          to highest distrust (5). This is not respondent-provided.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+
+      - name: ai_task
+        description: Individual development task evaluated by the respondent.
+        data_tests:
+          - not_null
+
+      - name: ai_task_status
+        description: Current or planned AI adoption status assigned to the task.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "Currently mostly AI"
+                - "Currently partially AI"
+                - "Plan to mostly use AI"
+                - "Plan to partially use AI"
+                - "Do not plan to use AI"
+
+      - name: ai_task_status_order
+        description: >
+          Technical sorting key for AI task adoption statuses, from highest
+          current AI involvement (1) to no planned AI use (5). This is not a
+          respondent-provided rank.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+
+      - name: respondent_count
+        description: >
+          Number of distinct respondents in the trust group who assigned the
+          given adoption status to the task.
+        data_tests:
+          - not_null
+
+      - name: trust_group_respondent_count
+        description: >
+          Number of distinct respondents in the trust group who assigned at
+          least one status to at least one AI task.
+        data_tests:
+          - not_null
+
+      - name: trust_task_respondent_count
+        description: >
+          Number of distinct respondents in the trust group who assigned any
+          adoption status to the specific task.
+        data_tests:
+          - not_null
+
+      - name: respondent_share_within_trust
+        description: >
+          respondent_count divided by trust_group_respondent_count. This is the
+          prevalence of the task-status combination within the trust group and
+          ranges from 0 to 1. Values across tasks are not additive.
+        data_tests:
+          - not_null
+
+      - name: respondent_share_within_trust_task
+        description: >
+          respondent_count divided by trust_task_respondent_count. This is the
+          status distribution for the task within the trust group and ranges
+          from 0 to 1. Status shares for one trust level and task should sum to
+          approximately 1.
+        data_tests:
+          - not_null

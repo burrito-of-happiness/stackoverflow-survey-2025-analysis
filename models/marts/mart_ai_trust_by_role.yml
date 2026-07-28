@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: mart_ai_trust_by_role
+    description: >
+      Distribution of AI trust levels within each reported developer role.
+      The model contains one row per developer role and AI trust level,
+      including zero-count combinations for a complete five-level trust
+      distribution. The denominator is the number of distinct respondents
+      in the same role who provided a non-null AI trust response.
+
+    columns:
+      - name: developer_role
+        description: >
+          Respondent's reported current developer or technology role, or the
+          role held for the longest period during the previous year.
+        data_tests:
+          - not_null
+
+      - name: ai_trust_level
+        description: Respondent's reported level of trust in AI tool accuracy.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "Highly trust"
+                - "Somewhat trust"
+                - "Neither trust nor distrust"
+                - "Somewhat distrust"
+                - "Highly distrust"
+
+      - name: ai_trust_order
+        description: >
+          Technical sorting key for AI trust levels. This value is created
+          for analysis and visualization and is not respondent-provided.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+
+      - name: respondent_count
+        description: >
+          Number of distinct respondents with the given developer role and
+          AI trust level. The value can be zero because the model retains a
+          complete set of five trust levels for every role.
+        data_tests:
+          - not_null
+
+      - name: role_respondent_count
+        description: >
+          Number of distinct respondents with the given developer role who
+          provided a non-null AI trust response. This is the denominator for
+          respondent_share_within_role.
+        data_tests:
+          - not_null
+
+      - name: respondent_share_within_role
+        description: >
+          Share of respondents with the given AI trust level among respondents
+          in the same developer role who answered the AI trust question. The
+          value ranges from 0 to 1, and the five shares within each role sum
+          to approximately 1 after rounding.
+        data_tests:
+          - not_null

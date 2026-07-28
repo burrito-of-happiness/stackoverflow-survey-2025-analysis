@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: int_ai_tasks_long
+    description: >
+      Converts the five AI task-delegation matrix columns into long format
+      and splits semicolon-separated task lists into individual task rows.
+      The source label 'Other (write in):' is standardized to 'Other'.
+      Duplicate selections within the same respondent, task and status are
+      collapsed, while the earliest source-list position is retained.
+
+      Grain: one row per response_id, ai_task and ai_task_status.
+
+    columns:
+      - name: response_id
+        description: Unique identifier of the survey response.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_survey_results')
+              field: response_id
+
+      - name: ai_task
+        description: >
+          Individual development task selected by the respondent. The source
+          write-in label 'Other (write in):' is represented as 'Other'.
+        data_tests:
+          - not_null
+
+      - name: ai_task_status
+        description: >
+          Current or planned AI-use status assigned by the respondent to the development task.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "Currently mostly AI"
+                - "Currently partially AI"
+                - "Plan to mostly use AI"
+                - "Plan to partially use AI"
+                - "Do not plan to use AI"
+
+      - name: ai_task_status_order
+        description: >
+          Technical display order for the five current and planned AI-use statuses. 
+          The value is used only for consistent sorting and must not be interpreted or aggregated 
+          as a respondent score, rank, maturity level, or continuous scale.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+
+      - name: task_position
+        description: >
+          Earliest position of the task within the semicolon-separated source
+          response for the given AI usage status.
+        data_tests:
+          - not_null

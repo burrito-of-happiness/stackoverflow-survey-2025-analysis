@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: int_ai_frustrations_long
+    description: >
+      Converts the semicolon-separated AI frustrations source field into long
+      format. Blank tokens are excluded and surrounding whitespace is removed.
+      The exact source label 'Other (write in):' is normalized to 'Other'.
+      Unexpected inline text after that label is rejected by a separate source
+      test rather than parsed as reliable free text, because the published
+      dataset has no dedicated AI-frustration write-in column.
+
+      Repeated occurrences of the same normalized category are collapsed to the
+      model grain and exposed through source_selection_count.
+
+      Grain: one row per response_id and normalized ai_frustration.
+
+    columns:
+      - name: response_id
+        description: Unique identifier of the survey response.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_survey_results')
+              field: response_id
+
+      - name: ai_frustration
+        description: >
+          Normalized response option selected for the AI-frustration question.
+          The exact source label 'Other (write in):' is represented as 'Other'.
+          'I haven’t encountered any problems' is retained because it is a
+          valid response option in the source question, even though it denotes
+          the absence of a frustration.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "AI solutions that are almost right, but not quite"
+                - "Debugging AI-generated code is more time-consuming"
+                - "I’ve become less confident in my own problem-solving"
+                - "It’s hard to understand how or why the code works"
+                - "I don’t use AI tools regularly"
+                - "I haven’t encountered any problems"
+                - "Other"
+
+      - name: frustration_position
+        description: >
+          Earliest position of the normalized category within the respondent's
+          semicolon-separated source response.
+        data_tests:
+          - not_null
+
+      - name: source_selection_count
+        description: >
+          Number of source tokens that normalized to this respondent-category
+          combination. The expected value is 1. A larger value indicates a
+          repeated source selection and causes the accepted-values test to fail.
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [1]
+              quote: false

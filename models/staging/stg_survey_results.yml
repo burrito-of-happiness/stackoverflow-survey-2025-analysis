@@ -1,0 +1,724 @@
+version: 2
+
+models:
+  - name: stg_survey_results
+    description: >
+      Cleaned and standardized Stack Overflow Developer Survey 2025 responses. 
+      The model preserves one row per survey respondent and includes all 172 fields selected from the source results table.
+      Source values stored as the literal string 'NA' or as blank strings are converted to SQL NULL, 
+      text values are trimmed, columns are renamed to snake_case, and fields with an unambiguous numeric meaning are safely cast with TRY_CAST. 
+      Multi-select, matrix, free-text, and ranking fields remain at respondent grain and are transformed in downstream intermediate models.
+    columns:
+      # Respondent identifier
+      - name: response_id
+        description: >
+          Unique identifier of a survey response.
+        data_tests:
+          - unique
+          - not_null
+
+      # Demographics
+      - name: main_branch
+        description: Respondent's primary relationship to software development, such as professional developer, learner, hobbyist, or another category.
+      - name: age_group
+        description: Age range selected by the respondent.
+      - name: education_level
+        description: Highest level of formal education completed by the respondent.
+      - name: country
+        description: Country or territory in which the respondent lives.
+         
+
+      # Employment, career and compensation
+      - name: employment
+        description: Primary employment status or statuses selected by the respondent.
+      - name: additional_employment
+        description:  Additional employment, study, volunteering, or other activities reported by the respondent.
+         
+      - name: years_professional
+        description: >
+          Whole number of years of professional work experience reported by the respondent. 
+          The survey instructed respondents with 0 years of professional experience to leave the field blank; 
+          therefore, NULL  may represent either 0 professional experience or no response.
+      - name: years_coding_total
+        description: >
+          Whole number of years the respondent has been coding in total, including coding undertaken as part of their education. 
+          Source values that cannot be converted to an integer are stored as NULL.
+      - name: developer_role
+        description: Current job role or the role held for the longest period in the past year.
+      - name: organization_size
+        description:  Approximate number of employees at the respondent's primary employer.        
+      - name: ic_or_manager
+        description: >
+          Indicates whether the respondent is an individual contributor, people manager, or another
+          management arrangement.
+      - name: remote_work
+        description: Current work arrangement, such as remote, hybrid, or in-person.     
+      - name: industry
+        description: Industry in which the respondent works.
+      - name: currency
+        description: Currency used for the respondent's reported compensation.          
+      - name: compensation_total_local
+        description: >
+          Total annual compensation reported in the respondent's local currency. Values that cannot be
+          converted to a number are stored as NULL.
+      - name: compensation_yearly_usd
+        description: >
+          Annual compensation converted to US dollars by the survey publisher. Values that cannot be
+          converted to a number are stored as NULL.
+
+      # Learning and professional development
+      - name: coding_learning_status_past_year
+        description: >
+           Respondent's answer to whether they began learning to code or learned
+           a new coding skill or programming language during the past year.          
+      - name: learning_resources_used_past_year
+        description: >
+          Resources and methods the respondent used to learn to code during the past year. 
+          Multiple selected values may be separated by semicolons.
+      - name: ai_learning_status_past_year
+        description: >
+          Whether the respondent spent time during the past year learning AI programming or AI-enabled tooling, 
+          either independently or at work.
+      - name: ai_learning_methods_used_past_year
+        description: >
+          Methods and resources the respondent used to learn AI programming or AI-enabled tooling during the past year. 
+          Multiple selected values may be separated by semicolons.
+
+      # Technology influence and selection context
+      - name: purchase_influence
+        description: >
+          Whether and how the respondent influenced or endorsed a new technology purchase 
+          at their organization or sole proprietor job during the previous year.
+        data_tests:
+          - accepted_values:
+              values:
+                - "No"
+                - "Yes, I influenced the purchase of a substantial addition to the tech stack" 
+                - "Yes, I influenced the purchase of a tool that more than five colleagues use but it is not a substantial addition to the tech stack"
+                - "Yes, I endorsed a tool that was open-source and is currently used by more than just myself but no purchase was made"
+                - "Yes, I endorsed a tool that was ultimately not purchased or used at my organization"
+      - name: technology_selection_context
+        description: >
+          Context selected by the respondent for the technology endorsement and rejection ranking questions. 
+          Values are Work, School, and Personal Project. 
+          This is a separate survey response and should not be inferred from purchase_influence
+        data_tests:
+          - accepted_values:
+              values:
+                - "Work"
+                - "School"
+                - "Personal Project"
+
+      # Technology endorsement rankings
+      
+      - name: tech_endorse_ai_capabilities_rank
+        description: >
+          Ranking position assigned to AI integration or AI-agent capabilities as a reason to endorse a
+          technology. Lower values indicate higher importance.
+      - name: tech_endorse_easy_api_rank
+        description: >
+          Ranking position assigned to an easy-to-use API as a reason to endorse a technology. Lower
+          values indicate higher importance.
+      - name: tech_endorse_robust_api_rank
+        description: >
+          Ranking position assigned to a robust and complete API as a reason to endorse a technology.
+          Lower values indicate higher importance.
+      - name: tech_endorse_customizable_codebase_rank
+        description: >
+          Ranking position assigned to a customizable and manageable codebase as a reason to endorse a
+          technology. Lower values indicate higher importance.
+      - name: tech_endorse_quality_reputation_rank
+        description: >
+          Ranking position assigned to a reputation for quality as a reason to endorse a technology.
+          Lower values indicate higher importance.
+      - name: tech_endorse_open_source_rank
+        description: >
+          Ranking position assigned to connection with an open-source project as a reason to endorse a
+          technology. Lower values indicate higher importance.
+      - name: tech_endorse_brand_image_rank
+        description: >
+          Ranking position assigned to brand and public image as a reason to endorse a technology. Lower
+          values indicate higher importance.
+      - name: tech_endorse_reliability_low_latency_rank
+        description: >
+          Ranking position assigned to reliability and low latency as a reason to endorse a technology.
+          Lower values indicate higher importance.
+      - name: tech_endorse_manageable_cost_rank
+        description: >
+          Ranking position assigned to manageable cost as a reason to endorse a technology. Lower values
+          indicate higher importance.
+      - name: tech_endorse_other_rank
+        description: >
+          Ranking position assigned to an 'Other' reason to endorse a technology. Lower values indicate
+          higher importance.
+      - name: tech_endorse_other_text
+        description: >
+          Free-text description of the respondent's other reason for endorsing a technology.
+
+      # Technology rejection rankings
+      - name: tech_reject_lack_of_ai_rank
+        description: >
+          Ranking position assigned to lack of AI or AI agents as a reason to reject a technology. Lower
+          values indicate a stronger rejection factor.
+      - name: tech_reject_poor_usability_rank
+        description: >
+          Ranking position assigned to poor usability as a reason to reject a technology. Lower values
+          indicate a stronger rejection factor.
+      - name: tech_reject_poor_api_rank
+        description: >
+          Ranking position assigned to a missing or sub-par API as a reason to reject a technology. Lower
+          values indicate a stronger rejection factor.
+      - name: tech_reject_inefficient_or_time_costly_rank
+        description: >
+          Ranking position assigned to inefficiency or excessive time cost as a reason to reject a
+          technology. Lower values indicate a stronger rejection factor.
+      - name: tech_reject_prohibitive_pricing_rank
+        description: >
+          Ranking position assigned to prohibitive pricing as a reason to reject a technology. Lower
+          values indicate a stronger rejection factor.
+      - name: tech_reject_security_or_privacy_rank
+        description: >
+          Ranking position assigned to security or privacy concerns as a reason to reject a technology.
+          Lower values indicate a stronger rejection factor.
+      - name: tech_reject_better_alternatives_rank
+        description: >
+          Ranking position assigned to the availability of better alternatives as a reason to reject a
+          technology. Lower values indicate a stronger rejection factor.
+      - name: tech_reject_outdated_technology_rank
+        description: >
+          Ranking position assigned to outdated or obsolete technology or features as a reason to reject
+          a technology. Lower values indicate a stronger rejection factor.
+      - name: tech_reject_ethical_concerns_rank
+        description: >
+          Ranking position assigned to ethical concerns as a reason to reject a technology. Lower values
+          indicate a stronger rejection factor.
+      - name: tech_reject_other_rank
+        description: >
+          Ranking position assigned to an 'Other' reason to reject a technology. Lower values indicate a
+          stronger rejection factor.
+      - name: tech_reject_other_text
+        description: >
+          Free-text description of the respondent's other reason for rejecting a technology.
+
+      # Job satisfaction and career sentiment
+      - name: job_satisfaction_score
+        description: >
+          Self-reported satisfaction score for the respondent's current professional developer role.
+      - name: ai_threat_perception
+        description: >
+          Whether the respondent believes AI is a threat to their current job.
+      - name: career_change_status
+        description: >
+          Whether the respondent considered a career change or transitioned into a new role during the
+          past year.
+      - name: workplace_tool_count
+        description: >
+          Number of distinct software applications or platforms regularly used for the respondent's
+          primary work role.
+      - name: personal_tool_count
+        description: >
+          Number of distinct software applications or platforms regularly used for side projects or other
+          personal work.
+      - name: job_satisfaction_quality_control_rank
+        description: >
+          Raw ranking value exported for control over the level of quality in projects as a contributor
+          to job satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_autonomy_rank
+        description: >
+          Raw ranking value exported for autonomy and trust to manage one's own tasks as a contributor
+          to job satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_team_collaboration_rank
+        description: >
+          Raw ranking value exported for collaboration and support from a team as a contributor to job
+          satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_expert_mentors_rank
+        description: >
+          Raw ranking value exported for access to expert mentors as a contributor to job satisfaction.
+          Lower values indicate higher importance.
+      - name: job_satisfaction_mentoring_others_rank
+        description: >
+          Raw ranking value exported for opportunities to mentor and lead junior-level coworkers as a
+          contributor to job satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_specialized_expertise_rank
+        description: >
+          Raw ranking value exported for developing specialized expertise as a contributor to job
+          satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_real_world_problems_rank
+        description: >
+          Raw ranking value exported for solving real-world problems as a contributor to job satisfaction.
+          Lower values indicate higher importance.
+      - name: job_satisfaction_job_stability_rank
+        description: >
+          Raw ranking value exported for job stability and career growth with a single employer as a
+          contributor to job satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_innovation_rank
+        description: >
+          Raw ranking value exported for innovation through solving challenging and complex problems as
+          a contributor to job satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_new_technologies_rank
+        description: >
+          Raw ranking value exported for working with new technologies and tools as a contributor to job
+          satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_pay_benefits_rank
+        description: >
+          Raw ranking value exported for competitive pay and benefits as a contributor to job satisfaction.
+          Lower values indicate higher importance.
+      - name: job_satisfaction_peer_recognition_rank
+        description: >
+          Raw ranking value exported for recognition from peers for one's work as a contributor to job
+          satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_leadership_recognition_rank
+        description: >
+          Raw ranking value exported for recognition from leadership for one's work as a contributor to
+          job satisfaction. Lower values indicate higher importance.
+      - name: job_satisfaction_like_manager_rank
+        description: >
+          Raw ranking value exported for liking one's manager as a contributor to job satisfaction.
+          Lower values indicate higher importance.
+      - name: job_satisfaction_other_rank
+        description: >
+          Raw ranking value exported for an Other factor as a contributor to job satisfaction. Lower
+          values indicate higher importance.
+      - name: job_satisfaction_other_text
+        description: >
+          Free-text description of the respondent's Other job-satisfaction factor.
+
+      # Programming languages
+      - name: language_choice
+        description: >
+          Routing or eligibility response associated with the programming-language usage and preference
+          questions.
+      - name: languages_have_worked_with
+        description: >
+          Programming languages used by the respondent during the past year. Multiple values may be
+          separated by semicolons.
+      - name: languages_want_to_work_with
+        description: >
+          Programming languages the respondent wants to use during the next year. Multiple values may be
+          separated by semicolons.
+      - name: languages_admired
+        description: >
+          Programming languages the respondent has used and wants to continue using, as provided in the
+          source dataset.
+      - name: languages_have_worked_with_other
+        description: >
+          Free-text programming languages used in the past year that were not listed in the survey
+          options.
+      - name: languages_want_to_work_with_other
+        description: >
+          Free-text programming languages desired for the next year that were not listed in the survey
+          options.
+
+      # Databases
+      - name: database_choice
+        description: >
+          Routing or eligibility response associated with the database usage and preference questions.
+      - name: databases_have_worked_with
+        description: >
+          Databases used by the respondent during the past year. Multiple values may be separated by
+          semicolons.
+      - name: databases_want_to_work_with
+        description: >
+          Databases the respondent wants to use during the next year. Multiple values may be separated by
+          semicolons.
+      - name: databases_admired
+        description: >
+          Databases the respondent has used and wants to continue using, as provided in the source
+          dataset.
+      - name: databases_have_worked_with_other
+        description: >
+          Free-text databases used in the past year that were not listed in the survey options.
+      - name: databases_want_to_work_with_other
+        description: >
+          Free-text databases desired for the next year that were not listed in the survey options.
+
+      # Cloud and development platforms
+      - name: platform_choice
+        description: >
+          Routing or eligibility response associated with cloud and development-platform usage and
+          preference questions.
+      - name: platforms_have_worked_with
+        description: >
+          Cloud or development platforms used by the respondent during the past year. Multiple values may
+          be separated by semicolons.
+      - name: platforms_want_to_work_with
+        description: >
+          Cloud or development platforms the respondent wants to use during the next year. Multiple
+          values may be separated by semicolons.
+      - name: platforms_admired
+        description: >
+          Cloud or development platforms the respondent has used and wants to continue using, as provided
+          in the source dataset.
+      - name: platforms_have_worked_with_other
+        description: >
+          Free-text cloud or development platforms used in the past year that were not listed in the
+          survey options.
+      - name: platforms_want_to_work_with_other
+        description: >
+          Free-text cloud or development platforms desired for the next year that were not listed in the
+          survey options.
+
+      # Web frameworks and technologies
+      - name: web_framework_choice
+        description: >
+          Routing or eligibility response associated with web-framework usage and preference questions.
+      - name: web_frameworks_have_worked_with
+        description: >
+          Web frameworks and technologies used by the respondent during the past year. Multiple values
+          may be separated by semicolons.
+      - name: web_frameworks_want_to_work_with
+        description: >
+          Web frameworks and technologies the respondent wants to use during the next year. Multiple
+          values may be separated by semicolons.
+      - name: web_frameworks_admired
+        description: >
+          Web frameworks and technologies the respondent has used and wants to continue using, as
+          provided in the source dataset.
+      - name: web_frameworks_have_worked_with_other
+        description: >
+          Free-text web frameworks or technologies used in the past year that were not listed in the
+          survey options.
+      - name: web_frameworks_want_to_work_with_other
+        description: >
+          Free-text web frameworks or technologies desired for the next year that were not listed in the
+          survey options.
+
+      # Development environments
+      - name: development_environment_choice
+        description: >
+          Routing or eligibility response associated with development-environment usage and preference
+          questions.
+      - name: development_environments_have_worked_with
+        description: >
+          Development environments used by the respondent during the past year. Multiple values may be
+          separated by semicolons.
+      - name: development_environments_want_to_work_with
+        description: >
+          Development environments the respondent wants to use during the next year. Multiple values may
+          be separated by semicolons.
+      - name: development_environments_admired
+        description: >
+          Development environments the respondent has used and wants to continue using, as provided in
+          the source dataset.
+      - name: development_environments_have_worked_with_other
+        description: >
+          Free-text development environments used in the past year that were not listed in the survey
+          options.
+      - name: development_environments_want_to_work_with_other
+        description: >
+          Free-text development environments desired for the next year that were not listed in the survey
+          options.
+
+      # Stack Overflow tags
+      - name: so_tags_have_worked_with
+        description: >
+          Stack Overflow technology tags associated with technologies the respondent used during the past
+          year. Multiple values may be separated by semicolons.
+      - name: so_tags_want_to_work_with
+        description: >
+          Stack Overflow technology tags associated with technologies the respondent wants to use during
+          the next year. Multiple values may be separated by semicolons.
+      - name: so_tags_admired
+        description: >
+          Stack Overflow technology tags associated with technologies the respondent has used and wants
+          to continue using.
+      - name: so_tags_have_worked_with_other
+        description: >
+          Free-text technology tags for technologies used in the past year that were not listed in the
+          survey options.
+      - name: so_tags_want_to_work_with_other
+        description: >
+          Free-text technology tags for technologies desired for the next year that were not listed in
+          the survey options.
+
+      # Operating systems
+      - name: operating_systems_personal_use
+        description: >
+          Operating systems used by the respondent for personal purposes. Multiple values may be
+          separated by semicolons.
+      - name: operating_systems_professional_use
+        description: >
+          Operating systems used by the respondent for professional purposes. Multiple values may be
+          separated by semicolons.
+
+      # Collaboration tools
+      - name: collaboration_tools_have_worked_with
+        description: >
+          Asynchronous collaboration and office tools used by the respondent during the past year.
+          Multiple values may be separated by semicolons.
+      - name: collaboration_tools_want_to_work_with
+        description: >
+          Asynchronous collaboration and office tools the respondent wants to use during the next year.
+          Multiple values may be separated by semicolons.
+      - name: collaboration_tools_admired
+        description: >
+          Asynchronous collaboration and office tools the respondent has used and wants to continue
+          using.
+      - name: collaboration_tools_have_worked_with_other
+        description: >
+          Free-text collaboration or office tools used in the past year that were not listed in the
+          survey options.
+      - name: collaboration_tools_want_to_work_with_other
+        description: >
+          Free-text collaboration or office tools desired for the next year that were not listed in the
+          survey options.
+
+      # Community platforms
+      - name: community_platforms_have_worked_with
+        description: >
+          Community platforms used by the respondent during the past year. Multiple values may be
+          separated by semicolons.
+      - name: community_platforms_want_to_work_with
+        description: >
+          Community platforms the respondent wants to use during the next year. Multiple values may be
+          separated by semicolons.
+      - name: community_platforms_admired
+        description: >
+          Community platforms the respondent has used and wants to continue using.
+      - name: community_platforms_have_worked_with_other
+        description: >
+          Free-text community platforms used in the past year that were not listed in the survey options.
+      - name: community_platforms_want_to_work_with_other
+        description: >
+          Free-text community platforms desired for the next year that were not listed in the survey
+          options.
+
+      # AI models
+      - name: ai_model_choice
+        description: >
+          Indicates whether the respondent used or integrated specific large language models in
+          development tools or applications during the past year.
+      - name: ai_models_have_worked_with
+        description: >
+          Large language models used by the respondent for development work during the past year.
+          Multiple values may be separated by semicolons.
+      - name: ai_models_want_to_work_with
+        description: >
+          Large language models the respondent wants to use for development work during the next year.
+          Multiple values may be separated by semicolons.
+      - name: ai_models_admired
+        description: >
+          Large language models the respondent has used and wants to continue using.
+      - name: ai_models_have_worked_with_other
+        description: >
+          Free-text large language models used in the past year that were not listed in the survey
+          options.
+      - name: ai_models_want_to_work_with_other
+        description: >
+          Free-text large language models desired for the next year that were not listed in the survey
+          options.
+
+# Stack Overflow engagement
+      - name: so_account_status
+        description: >
+          Whether the respondent has a Stack Overflow account.
+      - name: so_visit_frequency
+        description: >
+          How frequently the respondent visits Stack Overflow.
+      - name: so_usage_duration
+        description: >
+          Length of time the respondent has used Stack Overflow.
+      - name: so_participation_frequency
+        description: >
+          How frequently the respondent participates on Stack Overflow.
+      - name: so_developer_content_preferences
+        description: >
+          Types of developer-focused Stack Overflow content the respondent would like to see. Multiple
+          values may be separated by semicolons.
+      - name: so_action_browse_recent_related_content_rank
+        description: >
+          Raw ranking value exported for browsing content related to Q&A posts the respondent recently
+          viewed. Lower values indicate higher interest.
+      - name: so_action_read_vote_comments_rank
+        description: >
+          Raw ranking value exported for reading and/or voting on comments for a Question or Answer of
+          interest. Lower values indicate higher interest.
+      - name: so_action_bookmark_posts_rank
+        description: >
+          Raw ranking value exported for bookmarking posts to view later. Lower values indicate higher
+          interest.
+      - name: so_action_direct_open_post_rank
+        description: >
+          Raw ranking value exported for directly opening a Q&A post via search, documentation, or a peer.
+          Lower values indicate higher interest.
+      - name: so_action_ask_question_rank
+        description: >
+          Raw ranking value exported for asking a question on Stack Overflow. Lower values indicate higher
+          interest.
+      - name: so_action_answer_question_rank
+        description: >
+          Raw ranking value exported for answering a question on Stack Overflow. Lower values indicate
+          higher interest.
+      - name: so_action_comment_on_posts_rank
+        description: >
+          Raw ranking value exported for commenting on Q&A posts. Lower values indicate higher interest.
+      - name: so_action_upvote_downvote_posts_rank
+        description: >
+          Raw ranking value exported for upvoting or downvoting Q&A posts. Lower values indicate higher
+          interest.
+      - name: so_action_use_chat_feature_rank
+        description: >
+          Raw ranking value exported for using a discussion or chat feature. Lower values indicate higher
+          interest.
+      - name: so_action_other_rank
+        description: >
+          Raw ranking value exported for an Other Stack Overflow activity. Lower values indicate higher
+          interest.
+      - name: so_action_other_text
+        description: >
+          Free-text description of the respondent's Other Stack Overflow activity.
+      - name: so_community_belonging
+        description: >
+          Respondent's reported sense of belonging to the Stack Overflow community.
+      - name: so_friction
+        description: >
+          Problems or friction the respondent experiences when using Stack Overflow.
+
+      # AI usage, sentiment and trust
+      - name: ai_usage_status
+        description: >
+          Whether the respondent currently uses AI tools in the development process or plans to use them.
+      - name: ai_sentiment
+        description: >
+          Respondent's overall favorability toward using AI tools in the development workflow.
+      - name: ai_trust_level
+        description: >
+          Degree to which the respondent trusts the accuracy of output from AI tools used in the
+          development workflow.
+        data_tests:
+          - accepted_values:
+              values:
+                - "Highly trust"
+                - "Somewhat trust"
+                - "Neither trust nor distrust"
+                - "Somewhat distrust"
+                - "Highly distrust"
+      - name: ai_complex_task_rating
+        description: >
+          Respondent's assessment of how well AI tools handle complex development tasks.
+      - name: ai_frustrations
+        description: >
+          Problems or frustrations encountered when using AI tools. Multiple values may be separated by
+          semicolons.
+      - name: vibe_coding_explanation
+        description: >
+          Free-text response describing whether vibe coding is part of the respondent's professional
+          development work.
+      - name: ai_human_help_situations
+        description: >
+          Situations in which the respondent would still want help from another person if AI could
+          perform most coding tasks. Multiple values may be separated by semicolons.
+      - name: future_developer_skills
+        description: >
+          Free-text response describing skills expected to remain valuable as AI tools become more
+          capable.
+
+      # AI task delegation matrix
+      - name: ai_tasks_currently_partially_ai
+        description: >
+          Development tasks for which the respondent currently uses AI partially. Multiple tasks may be
+          separated by semicolons.
+      - name: ai_tasks_do_not_plan_to_use
+        description: >
+          Development tasks for which the respondent does not plan to use AI. Multiple tasks may be
+          separated by semicolons.
+      - name: ai_tasks_plan_to_partially_use
+        description: >
+          Development tasks for which the respondent plans to use AI partially over the next three to
+          five years. Multiple tasks may be separated by semicolons.
+      - name: ai_tasks_plan_to_mostly_use
+        description: >
+          Development tasks the respondent plans to perform mostly with AI over the next three to five
+          years. Multiple tasks may be separated by semicolons.
+      - name: ai_tasks_currently_mostly_ai
+        description: >
+          Development tasks the respondent currently performs mostly with AI. Multiple tasks may be
+          separated by semicolons.
+
+      # AI agents
+      - name: ai_agent_usage
+        description: >
+          Whether the respondent uses AI agents in development or other work.
+      - name: ai_agent_workflow_change
+        description: >
+          Whether AI tools or AI agents changed how the respondent completed development work during the
+          past year.
+      - name: ai_agent_uses
+        description: >
+          Industry purposes or specific development tasks for which the respondent uses AI agents.
+          Multiple values may be separated by semicolons.
+      - name: ai_agent_general_uses
+        description: >
+          General non-development purposes or tasks for which the respondent uses AI agents. Multiple
+          values may be separated by semicolons.
+      - name: ai_agent_impact_somewhat_agree
+        description: >
+          AI-agent impact statements assigned by the respondent to the 'somewhat agree' response level.
+          Multiple statements may be separated by semicolons.
+      - name: ai_agent_impact_neutral
+        description: >
+          AI-agent impact statements assigned by the respondent to the 'neither agree nor disagree'
+          response level. Multiple statements may be separated by semicolons.
+      - name: ai_agent_impact_somewhat_disagree
+        description: >
+          AI-agent impact statements assigned by the respondent to the 'somewhat disagree' response
+          level. Multiple statements may be separated by semicolons.
+      - name: ai_agent_impact_strongly_agree
+        description: >
+          AI-agent impact statements assigned by the respondent to the 'strongly agree' response level.
+          Multiple statements may be separated by semicolons.
+      - name: ai_agent_impact_strongly_disagree
+        description: >
+          AI-agent impact statements assigned by the respondent to the 'strongly disagree' response
+          level. Multiple statements may be separated by semicolons.
+      - name: ai_agent_challenges_neutral
+        description: >
+          AI-agent challenge statements assigned by the respondent to the 'neither agree nor disagree'
+          response level. Multiple statements may be separated by semicolons.
+      - name: ai_agent_challenges_somewhat_disagree
+        description: >
+          AI-agent challenge statements assigned by the respondent to the 'somewhat disagree' response
+          level. Multiple statements may be separated by semicolons.
+      - name: ai_agent_challenges_strongly_agree
+        description: >
+          AI-agent challenge statements assigned by the respondent to the 'strongly agree' response
+          level. Multiple statements may be separated by semicolons.
+      - name: ai_agent_challenges_somewhat_agree
+        description: >
+          AI-agent challenge statements assigned by the respondent to the 'somewhat agree' response
+          level. Multiple statements may be separated by semicolons.
+      - name: ai_agent_challenges_strongly_disagree
+        description: >
+          AI-agent challenge statements assigned by the respondent to the 'strongly disagree' response
+          level. Multiple statements may be separated by semicolons.
+      - name: ai_agent_memory_tools
+        description: >
+          AI-agent memory or data-management tools used by the respondent during the past year. Multiple
+          values may be separated by semicolons.
+      - name: ai_agent_memory_tools_other
+        description: >
+          Free-text AI-agent memory or data-management tools that were not listed in the survey options.
+      - name: ai_agent_orchestration_tools
+        description: >
+          AI-agent orchestration tools or agent frameworks used by the respondent during the past year.
+          Multiple values may be separated by semicolons.
+      - name: ai_agent_orchestration_tools_other
+        description: >
+          Free-text AI-agent orchestration tools or frameworks that were not listed in the survey
+          options.
+      - name: ai_agent_observability_security_tools
+        description: >
+          AI-agent observability, monitoring, or security tools used by the respondent during the past
+          year. Multiple values may be separated by semicolons.
+      - name: ai_agent_observability_security_tools_other
+        description: >
+          Free-text AI-agent observability, monitoring, or security tools that were not listed in the
+          survey options.
+      - name: ai_agent_external_tools
+        description: >
+          Out-of-the-box AI agents, copilots, or assistants used by the respondent during the past year.
+          Multiple values may be separated by semicolons.
+      - name: ai_agent_external_tools_other
+        description: >
+          Free-text out-of-the-box AI agents, copilots, or assistants that were not listed in the survey
+          options.
