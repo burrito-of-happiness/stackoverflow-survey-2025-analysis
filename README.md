@@ -282,7 +282,7 @@ These findings describe associations in the survey data and should not be interp
 * The survey sample may not represent the entire global developer population.
 * Not all respondents answered every relevant question.
 * Some developer roles and trust groups contain relatively small numbers of respondents.
-* Multi-select questions allow respondents to appear in more than one category where applicable.
+* Because the AI-frustration question is multi-select, one respondent may appear in several frustration categories.
 * AI-frustration shares are calculated among respondents who answered the frustration question rather than among every survey respondent.
 * The analysis identifies associations rather than causal relationships.
 * Percentages should be interpreted together with respondent counts and denominator definitions.
@@ -294,13 +294,18 @@ These findings describe associations in the survey data and should not be interp
 stackoverflow-survey-2025-analysis/
 ├── README.md
 ├── dbt_project.yml
+├── macros/
+│   └── clean_na.sql
 ├── models/
 │   ├── staging/
+│   │   ├── sources.yml
+│   │   ├── stg_survey_results.sql
+│   │   └── stg_survey_results.yml
 │   ├── intermediate/
 │   └── marts/
 ├── tests/
-│   ├── assert_mart_ai_trust_by_frustration_derived_fields.sql
-│   └── other singular dbt tests
+│   ├── intermediate/
+│   └── marts/
 ├── analyses/
 ├── data_exports/
 └── dashboard/
@@ -311,6 +316,7 @@ stackoverflow-survey-2025-analysis/
 * `models/staging/` — cleaned and standardized respondent-level survey model;
 * `models/intermediate/` — long-format models for AI tasks and AI frustrations;
 * `models/marts/` — final analytical datasets used in Tableau;
+* `macros/` — reusable dbt macros used to clean source values;
 * `tests/` — singular dbt tests for grain, uniqueness, accepted values, counts, shares, classifications, and ranks;
 * `analyses/` — audit queries used to inspect transformed data and investigate unexpected results;
 * `data_exports/` — CSV exports of the final mart models;
