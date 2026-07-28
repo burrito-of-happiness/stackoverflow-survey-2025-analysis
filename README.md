@@ -250,7 +250,7 @@ Where available, the folder includes:
 
 * the Tableau packaged workbook;
 * a PDF export;
-* a PNG preview.
+* PNG previews.
 
 ## 8. Key Findings
 
@@ -321,20 +321,15 @@ stackoverflow-survey-2025-analysis/
 
 1. Load the Stack Overflow Developer Survey 2025 responses into Snowflake.
 2. Configure the dbt connection to the relevant Snowflake database and schema.
-3. Install any required dbt packages:
 
-```bash
-dbt deps
-```
-
-4. Build the models and execute all configured schema and singular tests:
+3. Build the models and execute all configured schema and singular tests:
 
 ```bash
 dbt build
 ```
 
-5. Run the audit queries from the `analyses/` folder where additional manual validation is required.
-6. Export the final mart tables to CSV.
-7. Open or refresh the Tableau workbook using the exported mart datasets.
+4. Run the audit queries from the `analyses/` folder where additional manual validation is required.
+5. Export the final mart tables to CSV.
+6. Open or refresh the Tableau workbook using the exported mart datasets.
 
 Connection credentials, local profiles, temporary dbt output, and source survey files are not stored in the repository.
