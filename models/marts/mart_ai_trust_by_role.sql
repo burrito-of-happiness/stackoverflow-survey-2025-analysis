@@ -91,5 +91,5 @@ SELECT
     ai_trust_order,
     respondent_count,
     role_respondent_count,
-    respondent_share_within_roleSONAR_TASK.ANALYTICS.MART_AI_TRUST_BY_ROLE
+    respondent_share_within_role
 FROM final
